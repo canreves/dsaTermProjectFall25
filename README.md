@@ -1,4 +1,4 @@
-# 🎬 The Cinematic Economy: Analyzing the Impact of Budget and External Factors on Film Success
+# The Cinematic Economy: Analyzing the Impact of Budget and External Factors on Film Success
 
 ## **Project Overview**
 
