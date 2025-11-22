@@ -1,39 +1,35 @@
-# The Cinematic Economy: Analyzing the Impact of Budget, Inflation, and Seasonality on Film Success
+#  The Cinematic Economy: Analyzing the Impact of Budget, Star Prestige, Inflation and Seasonality on Film Success
 
 ## **Project Overview**
-This project aims to analyze the factors influencing a film's success, defined by commercial revenue (Box Office) and User Ratings. Instead of relying solely on raw budget numbers, this project will enhance the analysis by integrating economic context (Inflation Adjustment) and temporal factors (Seasonality/Holiday releases).
 
+This project aims to analyze the factors influencing a film's success, defined by commercial revenue (Box Office) and User Ratings. The analysis moves beyond simple correlations by integrating five key dimensions: **economic context (Inflation & Unemployment)**, **prestigious achievements (Award Scores)**, and **temporal factors (Seasonality)**.
 
-**The goal of this project is to build a predictive model for Box Office Revenue** by moving beyond simple correlations. To achieve this, I will enrich a standard movie dataset with:
-1.  **Inflation Data:** Adjusting historical budgets to 2024 values to allow for fair comparison across decades.
-2.  **Seasonality & Holiday Data:** Analyzing the impact of releasing films during major holiday windows (e.g., Christmas, Summer Blockbuster season).
-
-This approach fulfills the course requirement of applying Machine Learning techniques on an enriched, real-world dataset.
+The core objective is to build a high-quality **predictive model for Box Office Revenue** using an enriched dataset and foundational Machine Learning techniques (Regression).
 
 ---
 
 ## **Hypotheses**
 
-I will test the following hypotheses to understand the drivers of film success:
+The following hypotheses will be tested using statistical methods:
 
-1.  **Null Hypothesis ($H_0$):** Adjusted budget and release timing do not significantly influence a film's box office revenue.
-2.  **$H_1$—The Real Budget Effect:** When adjusted for **inflation**, films with higher production budgets will exhibit a stronger positive correlation with Box Office Revenue compared to raw nominal budgets.
-3.  **$H_2$—Star Power:** Films featuring top-tier actors or directors (quantified by historical popularity) will generate higher revenue, partially independent of the budget.
-4.  **$H_3$—The "Holiday" Effect:** Films released during major **US Holiday windows** (e.g., Thanksgiving, Christmas, July 4th) will achieve statistically higher revenue than those released during off-peak periods.
+1.  **Null Hypothesis ($H_0$):** Financial, temporal, and prestige factors do not significantly influence a film's box office revenue.
+2.  **$H_1$—The Real Economic Effect:** Films released during periods of lower **Unemployment Rate** and higher **Inflation-Adjusted Budget** will exhibit a stronger positive correlation with Box Office Revenue.
+3.  **$H_2$—Star Prestige Index:** Films whose lead actors or directors have a higher accumulated **Oscar/Award Prestige Score** (based on achievements *prior* to the film's release) will generate significantly higher revenue.
+4.  **$H_3$—The "Holiday" Effect:** Films released during major **US Holiday windows** will achieve statistically higher revenue than those released during off-peak periods.
 
 ---
 
 ## **Data Sources and Collection Plan**
 
-I will use a primary dataset from Kaggle and enrich it with two external data sources to add economic and temporal context.
+I will use a primary dataset from Kaggle and enrich it with **four external data sources** to add deep economic, prestige, and temporal context, fulfilling the course's data enrichment requirement.
 
 | Dataset | Content | Source & Method | Role in Project |
 | :--- | :--- | :--- | :--- |
 | **Primary Data** | Budget, Revenue, Ratings, Release Date, Cast, Runtime | **Kaggle (IMDB or TMDb Movie Dataset).** Downloaded as `.csv`. | **Core Dataset** |
-| **Enrichment 1** | US Consumer Price Index (CPI) | **US Bureau of Labor Statistics.** A static table of yearly inflation rates. | **Economic Normalization** (Calculating "Real Budget") |
-| **Enrichment 2** | US Federal Holidays | **Python `holidays` library** or static calendar list. | **Temporal Context** (Flagging Holiday Releases) |
-
-*Data filtering:* The analysis will focus on films released between **2010 and 2024** to ensure relevant market trends, though historical data may be used for inflation modeling.
+| **Enrichment 1** | US Consumer Price Index (CPI) | **US Bureau of Labor Statistics.** Static table, used for **yearly adjustment.** | **Economic Normalization** (Calculating "Real Budget") |
+| **Enrichment 2** | US Unemployment Rate | **Federal Reserve Economic Data (FRED).** Monthly/yearly rates, merged on **Release Year.** | **Economic Health** (Disposable Income Proxy) |
+| **Enrichment 3** | Academy Awards (Oscars) History | **Kaggle (The Oscar Award).** Requires **Feature Engineering** to calculate cumulative scores. | **Star Prestige Index** (The Basis of the Prestige Score) |
+| **Enrichment 4** | **Major US Federal Holiday Calendar** | **Official US Govermentt Calendar Data (BLS, OPM, etc.).** Used to create a binary flag. | **Temporal Context** (Flagging Holiday Releases) |
 
 ---
 
@@ -41,22 +37,28 @@ I will use a primary dataset from Kaggle and enrich it with two external data so
 
 The project pipeline follows the standard data science workflow:
 
-### 1. Data Processing & Enrichment
-* **Merge & Clean:** Combine the movie dataset with CPI data based on the `Year`.
-* **Inflation Adjustment:** Create a new feature `Real_Budget` by applying the CPI multiplier to the raw `Budget` column.
-* **Feature Engineering:**
-    * `Is_Holiday`: A binary feature (0/1) indicating if the release date falls within a 7-day window of a major holiday.
-    * `Star_Score`: A simple index based on the cast's previous movie performance (if available in the dataset).
+### 1. Data Processing & Feature Engineering
 
-### 2. Exploratory Data Analysis (EDA)
+* **Merge & Clean:** Combine the movie dataset with CPI, Unemployment, and Awards data based on `Year` and `Film/Person ID`.
+* **Inflation Adjustment:** Create the new feature `Real_Budget` using the CPI multiplier.
+* **Economic Context Merge:** Incorporate the corresponding **Unemployment Rate** for the film's release year.
+* **Feature Engineering (Crucial Steps):**
+    * **Star Prestige Index:** Calculate the cumulative count of major awards (Oscars/Nominations) received by the film's lead actors and director **prior to the film's release date**. This score (`Star_Prestige_Index`) will be used as a predictor.
+    * **Seasonality Flagging:** Create the binary feature `Is_Holiday` (0/1).
+
+### 2. Exploratory Data Analysis (EDA) & Hypothesis Testing
+
 * **Visualizations:**
-    * Scatter plots comparing `Raw Budget` vs. `Revenue` and `Real Budget` vs. `Revenue`.
+    * Scatter plots comparing `Real Budget` vs. `Revenue`.
     * Bar charts comparing average revenue of **Holiday** vs. **Non-Holiday** releases.
-* **Statistical Testing:** Perform a **t-test** to determine if the difference in revenue between holiday and non-holiday releases is statistically significant.
+    * Time-series plot showing **Unemployment Rate** vs. **Average Film Revenue** over the study period.
+* **Statistical Testing:**
+    * Perform **t-tests** to test the significance of differences in revenue (testing $H_3$).
+    * Perform **Correlation Analysis** to test the strength of the relationship between `Real_Budget`, `Unemployment Rate`, and `Star_Prestige_Index` vs. `Revenue` (testing $H_1$ and $H_2$).
 
-### 3. Machine Learning (ML)
-* **Model:** I will implement a **Linear Regression** model (and potentially a Decision Tree Regressor for comparison).
-* **Target:** `Box Office Revenue`.
-* **Features:** `Real_Budget`, `Is_Holiday`, `Runtime`, `Vote_Average` (Ratings).
-* **Evaluation:** The model's performance will be evaluated using **R-Squared ($R^2$)** and **RMSE** (Root Mean Squared Error) to see how well financial and temporal factors explain the variance in revenue.
+### 3. Machine Learning (ML) Implementation
 
+* **Model:** I will implement a **Linear Regression** model (and potentially a Decision Tree Regressor for comparison) as the primary ML method.
+* **Target:** `Box Office Revenue` (Continuous Variable).
+* **Features:** `Real_Budget`, `Unemployment Rate`, `Star_Prestige_Index`, `Is_Holiday`, `Runtime`, and `Vote_Average` (Ratings).
+* **Evaluation:** The model's performance will be evaluated using **R-Squared ($R^2$)** and **RMSE** (Root Mean Squared Error) to see how well financial, temporal, and prestige factors explain the variance in revenue.
