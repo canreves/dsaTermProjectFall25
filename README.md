@@ -1,7 +1,8 @@
 # The Cinematic Economy: Analyzing the Impact of Budget, Inflation, and Seasonality on Film Success
 
 ## **Project Overview**
-This project analyzes the key factors influencing a film's financial success and critical reception. While production budget is often seen as the primary driver of box office revenue, raw financial data can be misleading without economic context.
+This project aims to analyze the factors influencing a film's success, defined by commercial revenue (Box Office) and User Ratings. Instead of relying solely on raw budget numbers, this project will enhance the analysis by integrating economic context (Inflation Adjustment) and temporal factors (Seasonality/Holiday releases).
+
 
 **The goal of this project is to build a predictive model for Box Office Revenue** by moving beyond simple correlations. To achieve this, I will enrich a standard movie dataset with:
 1.  **Inflation Data:** Adjusting historical budgets to 2024 values to allow for fair comparison across decades.
