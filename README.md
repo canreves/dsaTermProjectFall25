@@ -53,21 +53,38 @@ The project pipeline follows the standard data science workflow:
     * **Seasonality Flagging ($H_3$):** Creation of the binary feature **`Is_Holiday`** (checking the release date against the Holiday Calendar).
     * **Categorical Transformation ($H_4$):** Creation of the **`Genre Explosion`** dataset, where multi-genre films are duplicated per genre to enable valid comparative analysis via **ANOVA**.
  
+
   
+## 2. Exploratory Data Analysis (EDA) & Hypothesis Testing
 
-### 2. Exploratory Data Analysis (EDA) & Hypothesis Testing
+This stage validates the hypotheses ($H_1$ - $H_4$) using visual analysis and statistical testing to prepare features for the predictive model.
 
-* **Visualizations:**
-    * Scatter plots comparing `Real Budget` vs. `Revenue`.
-    * Bar charts comparing average revenue of **Holiday** vs. **Non-Holiday** releases.
-    * Time-series plot showing **Unemployment Rate** vs. **Average Film Revenue** over the study period.
-* **Statistical Testing:**
-    * Perform **t-tests** to test the significance of differences in revenue (testing $H_3$).
-    * Perform **Correlation Analysis** to test the strength of the relationship between `Real_Budget`, `Unemployment Rate`, and `Star_Prestige_Index` vs. `Revenue` (testing $H_1$ and $H_2$).
+* **EDA Visualizations (The Proof):**
+    * **Trend Analysis:** Time-series plot showing the yearly trend of Average Film Revenue and Average Budget (Real USD) over the study period.
+    * **Economic Context:** Scatter plot comparing **Unemployment Rate** vs. **Average Film Revenue** to visualize the macro-economic impact ($H_1$).
+    * **Categorical Comparison:** Bar charts showing the average `Real_Revenue` earned by major `Genre` categories.
+    * **Distribution Analysis:** Box plots comparing the distribution of revenue for **Holiday** vs. **Non-Holiday** releases ($H_3$).
+    * **Correlation Heatmap:** Visual inspection of relationships between all key numeric features (`Real_Budget`, `UNRATE`, `Star_Prestige_Index`, etc.).
 
-### 3. Machine Learning (ML) Implementation
+* **Statistical Testing (Hypothesis Validation):**
+    * **$H_1$ & $H_2$ (Correlation):** Perform **Pearson Correlation Analysis** to measure the strength of the relationship between continuous predictors (`Real_Budget`, `Unemployment Rate`, `Star_Prestige_Index`) and `Real_Revenue`.
+    * **$H_3$ (Seasonality):** Perform **Independent T-tests** to test the significance of the difference in mean revenue between Holiday and Non-Holiday releases.
+    * **$H_4$ (Genre Effect):** Perform **One-Way ANOVA** (Analysis of Variance) to statistically determine if there is a significant difference in mean revenue across the top 4-5 major film genres.
 
-* **Model:** I will implement a **Linear Regression** model (and potentially a Decision Tree Regressor for comparison) as the primary ML method.
-* **Target:** `Box Office Revenue` (Continuous Variable).
-* **Features:** `Real_Budget`, `Unemployment Rate`, `Star_Prestige_Index`, `Is_Holiday`, `Runtime`, and `Vote_Average` (Ratings).
-* **Evaluation:** The model's performance will be evaluated using **R-Squared ($R^2$)** and **RMSE** (Root Mean Squared Error) to see how well financial, temporal, and prestige factors explain the variance in revenue.
+***
+
+## 3. Machine Learning (ML) Implementation
+
+This stage focuses on building a predictive framework for financial success using the enriched features derived from Step 1.
+
+* **Model:** I will implement a **Linear Regression** model as the primary benchmark, with a **Decision Tree Regressor** used for comparison and feature importance analysis.
+* **Target:** `Box Office Revenue` (Continuous Variable, likely transformed using $\log(Revenue)$ to reduce skewness for Linear Regression).
+* **Features:** The model will be trained on the final, enriched set of predictors:
+    * `Real_Budget`
+    * `Unemployment Rate`
+    * `Star_Prestige_Index`
+    * `Is_Holiday`
+    * `Runtime`
+    * `Vote_Average`
+    * `Popularity` (Optional inclusion for robustness)
+* **Evaluation:** The model's performance will be evaluated using standard regression metrics: **R-Squared ($R^2$)** for overall fit and **RMSE** (Root Mean Squared Error) for error quantification.
