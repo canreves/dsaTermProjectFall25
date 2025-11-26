@@ -1,8 +1,13 @@
-#  The Cinematic Economy: Analyzing the Impact of Budget, Star Prestige, Inflation and Seasonality on Film Success
+#  The Cinematic Economy: Analyzing the Impact of Budget, Star Prestige, Inflation, Genre and Seasonality on Film Success
 
 ## **Project Overview**
 
-This project aims to analyze the factors influencing a film's success, defined by commercial revenue (Box Office) and User Ratings. The analysis moves beyond simple correlations by integrating five key dimensions: **economic context (Inflation & Unemployment)**, **prestigious achievements (Award Scores)**, and **temporal factors (Seasonality)**.
+This project aims to analyze the factors influencing a film's success, defined by commercial revenue (Box Office) and User Ratings. The analysis moves beyond simple correlations by integrating **four** comprehensive dimensions:
+
+* **Economic Context:** Examining the impact of macro factors like **Inflation-Adjusted Budget** ($H_1$) and **Unemployment Rate**.
+* **Star Prestige:** Quantifying the effect of **Accumulated Award Scores (Oscar History)** of the director and lead cast.
+* **Temporal Factors:** Testing the revenue differential based on release timing, such as **major US Holiday windows**.
+* **Categorical Attributes:** Determining if the film's **Genre** creates a statistically significant difference in mean box office revenue.
 
 The core objective is to build a high-quality **predictive model for Box Office Revenue** using an enriched dataset and foundational Machine Learning techniques (Regression).
 
