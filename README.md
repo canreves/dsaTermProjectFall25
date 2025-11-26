@@ -16,6 +16,7 @@ The following hypotheses will be tested using statistical methods:
 2.  **$H_1$—The Real Economic Effect:** Films released during periods of lower **Unemployment Rate** and higher **Inflation-Adjusted Budget** will exhibit a stronger positive correlation with Box Office Revenue.
 3.  **$H_2$—Star Prestige Index:** Films whose lead actors or directors have a higher accumulated **Oscar/Award Prestige Score** (based on achievements *prior* to the film's release) will generate significantly higher revenue.
 4.  **$H_3$—The "Holiday" Effect:** Films released during major **US Holiday windows** will achieve statistically higher revenue than those released during off-peak periods.
+5.  **H₄—Genre Effect (New):** The category to which the films belong (e.g. Action, Comedy, Drama) creates a **statistically significant** difference on the average gross.
 
 ---
 
