@@ -1,4 +1,4 @@
-# Proje: Cinematic Economy Analysis
+# Project: Cinematic Economy Analysis
 
 # Data Processing
 pandas
