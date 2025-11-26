@@ -53,8 +53,8 @@ The project pipeline follows the standard data science workflow:
     * **Seasonality Flagging ($H_3$):** Creation of the binary feature **`Is_Holiday`** (checking the release date against the Holiday Calendar).
     * **Categorical Transformation ($H_4$):** Creation of the **`Genre Explosion`** dataset, where multi-genre films are duplicated per genre to enable valid comparative analysis via **ANOVA**.
  
+---
 
-  
 ## 2. Exploratory Data Analysis (EDA) & Hypothesis Testing
 
 This stage validates the hypotheses ($H_1$ - $H_4$) using visual analysis and statistical testing to prepare features for the predictive model.
