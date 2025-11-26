@@ -45,12 +45,15 @@ The project pipeline follows the standard data science workflow:
 
 ### 1. Data Processing & Feature Engineering
 
-* **Merge & Clean:** Combine the movie dataset with CPI, Unemployment, and Awards data based on `Year` and `Film/Person ID`.
-* **Inflation Adjustment:** Create the new feature `Real_Budget` using the CPI multiplier.
-* **Economic Context Merge:** Incorporate the corresponding **Unemployment Rate** for the film's release year.
+* **Initial Merge & Cleaning:** Primary Movie Data (`tmdb_5000_movies`) is combined with actor/crew data (`tmdb_5000_credits`) and filtered for valid financial entries (Budget & Revenue > $1000$). Complex JSON columns (Genres, Companies) are parsed into simple comma-separated strings.
+* **Inflation Adjustment ($H_1$):** **CPI (Consumer Price Index)** data is merged by `Year` to calculate **`Real_Budget`** and **`Real_Revenue`**. This removes financial distortion over time.
+* **Economic Context Merge ($H_1$):** **Unemployment Rate** data (FRED) is incorporated by `Release Year`.
 * **Feature Engineering (Crucial Steps):**
-    * **Star Prestige Index:** Calculate the cumulative count of major awards (Oscars/Nominations) received by the film's lead actors and director **prior to the film's release date**. This score (`Star_Prestige_Index`) will be used as a predictor.
-    * **Seasonality Flagging:** Create the binary feature `Is_Holiday` (0/1).
+    * **Star Prestige Index ($H_2$):** Calculated by counting the cumulative **Oscar/Award Wins** of the film's director and top actors **prior to the movie's release date**. This ensures no look-ahead bias and creates the predictive feature `Star_Prestige_Index`.
+    * **Seasonality Flagging ($H_3$):** Creation of the binary feature **`Is_Holiday`** (checking the release date against the Holiday Calendar).
+    * **Categorical Transformation ($H_4$):** Creation of the **`Genre Explosion`** dataset, where multi-genre films are duplicated per genre to enable valid comparative analysis via **ANOVA**.
+ 
+  
 
 ### 2. Exploratory Data Analysis (EDA) & Hypothesis Testing
 
