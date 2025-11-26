@@ -2,7 +2,7 @@
 
 ## **Project Overview**
 
-This project aims to analyze the factors influencing a film's success, defined by commercial revenue (Box Office) and User Ratings. The analysis moves beyond simple correlations by integrating **four** comprehensive dimensions:
+This project aims to analyze the factors influencing a film's success, defined by commercial revenue (Box Office) and user ratings. The analysis moves beyond simple correlations by integrating **four** comprehensive dimensions:
 
 * **Economic Context:** Examining the impact of macro factors like **Inflation-Adjusted Budget** ($H_1$) and **Unemployment Rate**.
 * **Star Prestige:** Quantifying the effect of **Accumulated Award Scores (Oscar History)** of the director and lead cast.
