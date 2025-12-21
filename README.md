@@ -1,4 +1,4 @@
-#  The Cinematic Economy: Analyzing the Impact of Budget, Star Prestige, Inflation, Genre and Seasonality on Film Success
+# The Cinematic Economy: Analyzing the Impact of Budget, Star Prestige, Inflation, Genre and Seasonality on Film Success
 
 ## **Project Overview**
 
@@ -47,44 +47,44 @@ The project pipeline follows the standard data science workflow:
 
 * **Initial Merge & Cleaning:** Primary Movie Data (`tmdb_5000_movies`) is combined with actor/crew data (`tmdb_5000_credits`) and filtered for valid financial entries (Budget & Revenue > $1000$). Complex JSON columns (Genres, Companies) are parsed into simple comma-separated strings.
 * **Inflation Adjustment ($H_1$):** **CPI (Consumer Price Index)** data is merged by `Year` to calculate **`Real_Budget`** and **`Real_Revenue`**. This removes financial distortion over time.
+* **Logarithmic Transformation:** Due to the right-skewed nature of financial data (where outliers like blockbusters distort the scale), a **$\log_{10}$ transformation** is applied to both `Real_Budget` and `Real_Revenue`. This normalization allows for clearer visualization of orders of magnitude and improves regression performance.
 * **Economic Context Merge ($H_1$):** **Unemployment Rate** data (FRED) is incorporated by `Release Year`.
-* **Feature Engineering (Crucial Steps):**
-    * **Star Prestige Index ($H_2$):** Calculated by counting the cumulative **Oscar/Award Wins** of the film's director and top actors **prior to the movie's release date**. This ensures no look-ahead bias and creates the predictive feature `Star_Prestige_Index`.
+* **Feature Engineering:**
+    * **Star Prestige Index ($H_2$):** Calculated by counting the cumulative **Oscar/Award Wins** of the film's director and top actors **prior to the movie's release date**. This ensures no look-ahead bias.
     * **Seasonality Flagging ($H_3$):** Creation of the binary feature **`Is_Holiday`** (checking the release date against the Holiday Calendar).
     * **Categorical Transformation ($H_4$):** Creation of the **`Genre Explosion`** dataset, where multi-genre films are duplicated per genre to enable valid comparative analysis via **ANOVA**.
- 
+
 ---
 
 ## 2. Exploratory Data Analysis (EDA) & Hypothesis Testing
 
-This stage validates the hypotheses ($H_1$ - $H_4$) using visual analysis and statistical testing to prepare features for the predictive model.
+This stage validates the hypotheses ($H_1$ - $H_4$) using visual analysis and statistical testing.
 
-* **EDA Visualizations (The Proof):**
-    * **Trend Analysis:** Time-series plot showing the yearly trend of Average Film Revenue and Average Budget (Real USD) over the study period.
-    * **Economic Context:** Scatter plot comparing **Unemployment Rate** vs. **Average Film Revenue** to visualize the macro-economic impact ($H_1$).
-    * **Categorical Comparison:** Bar charts showing the average `Real_Revenue` earned by major `Genre` categories.
-    * **Distribution Analysis:** Box plots comparing the distribution of revenue for **Holiday** vs. **Non-Holiday** releases ($H_3$).
+* **EDA Visualizations:**
+    * **Trend Analysis:** Time-series plot showing the yearly trend of Average **Log10 Revenue** and **Log10 Budget** to visualize relative growth.
+    * **Economic Context:** Scatter plot comparing **Unemployment Rate** vs. **Log10 Revenue** to visualize the macro-economic impact ($H_1$).
+    * **Categorical Comparison:** Box plots comparing the distribution of `Log_Real_Revenue` earned by major `Genre` categories.
+    * **Distribution Analysis:** Box plots comparing the distribution of log-revenue for **Holiday** vs. **Non-Holiday** releases ($H_3$).
     * **Correlation Heatmap:** Visual inspection of relationships between all key numeric features (`Real_Budget`, `UNRATE`, `Star_Prestige_Index`, etc.).
 
 * **Statistical Testing (Hypothesis Validation):**
-    * **$H_1$ & $H_2$ (Correlation):** Perform **Pearson Correlation Analysis** to measure the strength of the relationship between continuous predictors (`Real_Budget`, `Unemployment Rate`, `Star_Prestige_Index`) and `Real_Revenue`.
+    * **$H_1$ & $H_2$ (Correlation):** Perform **Pearson Correlation Analysis** to measure the strength of the relationship between continuous predictors and Revenue.
     * **$H_3$ (Seasonality):** Perform **Independent T-tests** to test the significance of the difference in mean revenue between Holiday and Non-Holiday releases.
-    * **$H_4$ (Genre Effect):** Perform **One-Way ANOVA** (Analysis of Variance) to statistically determine if there is a significant difference in mean revenue across the top 4-5 major film genres.
+    * **$H_4$ (Genre Effect):** Perform **One-Way ANOVA** (Analysis of Variance) to statistically determine if there is a significant difference in mean revenue across the top 5 major film genres.
 
-***
+---
 
 ## 3. Machine Learning (ML) Implementation
 
 This stage focuses on building a predictive framework for financial success using the enriched features derived from Step 1.
 
 * **Model:** I will implement a **Linear Regression** model as the primary benchmark, with a **Decision Tree Regressor** used for comparison and feature importance analysis.
-* **Target:** `Box Office Revenue` (Continuous Variable, likely transformed using $\log(Revenue)$ to reduce skewness for Linear Regression).
+* **Target:** `Log_Real_Revenue` (Using the log-transformed variable to satisfy the normality assumption of Linear Regression).
 * **Features:** The model will be trained on the final, enriched set of predictors:
-    * `Real_Budget`
+    * `Log_Real_Budget`
     * `Unemployment Rate`
     * `Star_Prestige_Index`
     * `Is_Holiday`
     * `Runtime`
     * `Vote_Average`
-    * `Popularity` (Optional inclusion for robustness)
 * **Evaluation:** The model's performance will be evaluated using standard regression metrics: **R-Squared ($R^2$)** for overall fit and **RMSE** (Root Mean Squared Error) for error quantification.
